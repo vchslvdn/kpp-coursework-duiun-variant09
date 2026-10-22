@@ -46,15 +46,14 @@ CREATE TABLE consumption_record (
      FOREIGN KEY (measure_id) REFERENCES measure(id) ON DELETE CASCADE
 );
 
-INSERT INTO audit_object(code, name, address) VALUES
-    ('OBJ-01', 'Національний університет "Полтавська політехніка імені Юрія Кондратюка"', 'просп. Віталія Грицаєнка, 24'),
+INSERT INTO audit_object(code, name, address)
+VALUES ('OBJ-01', 'Національний університет "Полтавська політехніка імені Юрія Кондратюка"', 'м. Полтава, просп. Віталія Грицаєнка, 24');
 
-INSERT INTO energy_audit(object_id, audit_date, auditor_name, actual_consumption, norm_consumption, payback_score, emission_score) VALUES
-    (1, '2026-10-22', 'Кантенко С.І.', 150.0, 100.0, 80.0, 70.0),
+INSERT INTO energy_audit(object_id, audit_date, auditor_name, actual_consumption, norm_consumption, payback_score, emission_score)
+VALUES (1, '2026-10-22', 'Кантенко С.І.', 150.0, 100.0, 80.0, 70.0);
 
-
-INSERT INTO measure(audit_id, state, f1, f2, f3, priority_index) VALUES
-    (1, 'PROPOSED', 50.0, 80.0, 70.0, 65.5);
+INSERT INTO measure(audit_id, state, f1, f2, f3, priority_index)
+VALUES (1, 'PROPOSED', 50.0, 80.0, 70.0, 65.5);
 
 INSERT INTO consumption_record(measure_id, energy_type, amount, period) VALUES
     (1, 'Електроенергія', 1420.5, '2026-10');
