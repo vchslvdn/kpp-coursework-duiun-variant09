@@ -11,6 +11,13 @@ public final class DBUtil {
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException ignored) {
+        }
+    }
+
     private DBUtil() {
     }
 
