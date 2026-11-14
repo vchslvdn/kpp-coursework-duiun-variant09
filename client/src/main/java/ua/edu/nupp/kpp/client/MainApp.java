@@ -92,6 +92,7 @@ public class MainApp extends Application {
         );
         TextField objectId = new TextField(), auditDate = new TextField(), auditorName = new TextField(),
                 actual = new TextField(), norm = new TextField(), f2 = new TextField(), f3 = new TextField();
+
         Button add = new Button("Додати"), update = new Button("Змінити"), delete = new Button("Видалити"), refresh = new Button("Оновити");
 
         add.setOnAction(e -> safe(() -> {
@@ -192,6 +193,22 @@ public class MainApp extends Application {
         TextField measureId = new TextField(), energyType = new TextField(), amount = new TextField(), period = new TextField();
         Button add = new Button("Додати"), update = new Button("Змінити"), delete = new Button("Видалити"), refresh = new Button("Оновити");
 
+        Button testImport = new Button("Тест CSV");
+        testImport.setOnAction(e -> safe(() -> {
+            try {
+                api.addRecord(readTestRecord());
+                refreshRecords();
+
+                javafx.scene.control.Alert info = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                info.setHeaderText("Успіх");
+                info.setContentText("Запис споживання успішно імпортовано!");
+                info.showAndWait();
+            } catch (java.io.IOException ex) {
+                throw new RuntimeException("Помилка читання файлу CSV: " + ex.getMessage(), ex);
+            }
+        }));
+
+
         add.setOnAction(e -> safe(() -> {
             api.addRecord(new ConsumptionRecord(null, Long.parseLong(measureId.getText()), energyType.getText(), Double.parseDouble(amount.getText()), period.getText()));
             refreshRecords();
@@ -221,7 +238,7 @@ public class MainApp extends Application {
                 new Label("Тип енергії"), energyType,
                 new Label("Обсяг"), amount,
                 new Label("Період (YYYY-MM)"), period,
-                new HBox(8, add, update, delete, refresh)
+                new HBox(8, add, update, delete, refresh, testImport)
         ));
     }
 
@@ -298,6 +315,25 @@ public class MainApp extends Application {
         TableColumn<S, T> c = new TableColumn<>(title);
         c.setCellValueFactory(new PropertyValueFactory<>(property));
         return c;
+    }
+
+    private ConsumptionRecord readTestRecord() throws java.io.IOException {
+        java.nio.file.Path file = java.nio.file.Path.of("sample-data", "consumption_records.csv");
+        java.util.List<String> lines = java.nio.file.Files.readAllLines(file, java.nio.charset.StandardCharsets.UTF_8);
+
+        String line = lines.get(1);
+        String[] parts = line.split(";", -1);
+
+        if (parts.length != 4) {
+            throw new IllegalArgumentException("Некоректна кількість стовпців: " + parts.length);
+        }
+
+        Long measureId = Long.parseLong(parts[0].trim());
+        String energyType = parts[1].trim();
+        Double amount = Double.parseDouble(parts[2].trim());
+        String period = parts[3].trim();
+
+        return new ConsumptionRecord(null, measureId, energyType, amount, period);
     }
 
     public static void main(String[] args) {
