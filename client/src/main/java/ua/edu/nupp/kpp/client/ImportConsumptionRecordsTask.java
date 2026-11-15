@@ -20,9 +20,10 @@ public class ImportConsumptionRecordsTask extends Task<Integer> {
 
     @Override
     protected Integer call() throws Exception {
+        LOG.info("Початок CSV-імпорту");
         updateMessage("Читання CSV-файла...");
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
-        String header = "measureId;energyType;amount;period";
+        String header = "object_id;energy_type;amount;period";
 
         if (lines.isEmpty() || !header.equals(lines.get(0).strip())) {
             throw new IllegalArgumentException("Некоректний заголовок CSV");
@@ -73,6 +74,7 @@ public class ImportConsumptionRecordsTask extends Task<Integer> {
         }
 
         if (total == 0) updateProgress(1, 1);
+        LOG.info("Завершення імпорту...");
         LOG.info("Імпортовано: " + imported);
         return imported;
     }
