@@ -19,23 +19,23 @@ public class AuditObjectService {
     public void add(AuditObject o) throws SQLException {
         validate(o);
         dao.add(o);
-        LOG.info("Додано об'єкт енергоаудиту");
+        LOG.info("Energy audit object added");
     }
 
     public void update(AuditObject o) throws SQLException {
         validate(o);
         dao.update(o);
-        LOG.info("Оновлено об'єкт енергоаудиту");
+        LOG.info("Energy audit object updated");
     }
 
     public void delete(long id) throws SQLException {
         dao.delete(id);
-        LOG.info("Видалено об'єкт енергоаудиту");
+        LOG.info("Energy audit object deleted");
     }
 
     static void validate(AuditObject o) {
         if (o == null || blank(o.getCode()) || blank(o.getName()) || blank(o.getAddress())) {
-            throw new IllegalArgumentException("Усі поля об'єкта є обов'язковими");
+            throw new IllegalArgumentException("All object fields are required");
         }
     }
 

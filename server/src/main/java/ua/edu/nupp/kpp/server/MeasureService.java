@@ -19,34 +19,34 @@ public class MeasureService {
 
     public void add(long auditId) throws SQLException {
         dao.add(fromAudit(null, auditId, MeasureState.PROPOSED));
-        LOG.info("Створено захід енергозбереження");
+        LOG.info("Energy saving measure created");
     }
 
     public void update(long id, long auditId) throws SQLException {
         Measure old = dao.getById(id);
         if (old == null) {
-            throw new IllegalArgumentException("Захід не знайдено");
+            throw new IllegalArgumentException("Measure not found");
         }
         dao.update(fromAudit(id, auditId, old.getState()));
-        LOG.info("Оновлено захід енергозбереження");
+        LOG.info("Energy saving measure updated");
     }
 
     public void changeState(long id, MeasureState next) throws SQLException {
         Measure current = dao.getById(id);
         if (current == null) {
-            throw new IllegalArgumentException("Захід не знайдено");
+            throw new IllegalArgumentException("Measure not found");
         }
         if (!isAllowedTransition(current.getState(), next)) {
-            LOG.warning("Недопустимий перехід стану: " + current.getState() + " -> " + next);
-            throw new IllegalArgumentException("Недопустимий перехід стану");
+            LOG.warning("Invalid state transition: " + current.getState() + " -> " + next);
+            throw new IllegalArgumentException("Invalid state transition");
         }
         dao.updateState(id, next);
-        LOG.info("Змінено стан заходу: " + current.getState() + " -> " + next);
+        LOG.info("Measure state changed: " + current.getState() + " -> " + next);
     }
 
     public void delete(long id) throws SQLException {
         dao.delete(id);
-        LOG.info("Видалено захід енергозбереження");
+        LOG.info("Energy saving measure deleted");
     }
 
     public static boolean isAllowedTransition(MeasureState from, MeasureState to) {
@@ -58,7 +58,7 @@ public class MeasureService {
     private Measure fromAudit(Long id, long auditId, MeasureState state) throws SQLException {
         EnergyAudit a = auditDAO.getById(auditId);
         if (a == null) {
-            throw new IllegalArgumentException("Енергоаудит не знайдено");
+            throw new IllegalArgumentException("Energy audit not found");
         }
         double f1 = PriorityCalculator.factor1(a.getActualConsumption(), a.getNormConsumption());
         double f2 = a.getPaybackScore();

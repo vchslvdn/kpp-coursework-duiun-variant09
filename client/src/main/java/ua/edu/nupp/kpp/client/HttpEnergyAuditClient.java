@@ -119,7 +119,7 @@ public class HttpEnergyAuditClient {
             }
             return r.body();
         } catch (Exception e) {
-            throw new RuntimeException("Помилка HTTP: " + e.getMessage(), e);
+            throw new RuntimeException("HTTP error: " + e.getMessage(), e);
         }
     }
 
@@ -127,7 +127,7 @@ public class HttpEnergyAuditClient {
         try {
             return mapper.readValue(json, type);
         } catch (Exception e) {
-            throw new RuntimeException("Помилка JSON", e);
+            throw new RuntimeException("JSON error", e);
         }
     }
 

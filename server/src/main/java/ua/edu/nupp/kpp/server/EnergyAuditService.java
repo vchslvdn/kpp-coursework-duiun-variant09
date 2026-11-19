@@ -21,39 +21,39 @@ public class EnergyAuditService {
         validate(a);
         requireObject(a.getObjectId());
         dao.add(a);
-        LOG.info("Додано енергоаудит");
+        LOG.info("Energy audit added");
     }
 
     public void update(EnergyAudit a) throws SQLException {
         validate(a);
         requireObject(a.getObjectId());
         dao.update(a);
-        LOG.info("Оновлено енергоаудит");
+        LOG.info("Energy audit updated");
     }
 
     public void delete(long id) throws SQLException {
         dao.delete(id);
-        LOG.info("Видалено енергоаудит");
+        LOG.info("Energy audit deleted");
     }
 
     static void validate(EnergyAudit a) {
         if (a == null || a.getObjectId() <= 0
                 || a.getAuditDate() == null || a.getAuditDate().isBlank()
                 || a.getAuditorName() == null || a.getAuditorName().isBlank()) {
-            throw new IllegalArgumentException("Некоректні основні дані енергоаудиту");
+            throw new IllegalArgumentException("Invalid basic energy audit data");
         }
         if (a.getActualConsumption() < 0 || a.getNormConsumption() <= 0) {
-            throw new IllegalArgumentException("Некоректні числові дані споживання");
+            throw new IllegalArgumentException("Invalid numeric consumption data");
         }
         if (a.getPaybackScore() < 0 || a.getPaybackScore() > 100
                 || a.getEmissionScore() < 0 || a.getEmissionScore() > 100) {
-            throw new IllegalArgumentException("F2 і F3 мають бути в діапазоні 0..100");
+            throw new IllegalArgumentException("F2 and F3 must be in the range 0..100");
         }
     }
 
     private void requireObject(long id) throws SQLException {
         if (objectDAO.getById(id) == null) {
-            throw new IllegalArgumentException("Об'єкт енергоаудиту не знайдено");
+            throw new IllegalArgumentException("Energy audit object not found");
         }
     }
 }

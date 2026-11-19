@@ -21,19 +21,19 @@ public class ConsumptionRecordService {
         validate(r);
         requireMeasure(r.getMeasureId());
         dao.add(r);
-        LOG.info("Додано запис споживання");
+        LOG.info("Consumption record added");
     }
 
     public void update(ConsumptionRecord r) throws SQLException {
         validate(r);
         requireMeasure(r.getMeasureId());
         dao.update(r);
-        LOG.info("Оновлено запис споживання");
+        LOG.info("Consumption record updated");
     }
 
     public void delete(long id) throws SQLException {
         dao.delete(id);
-        LOG.info("Видалено запис споживання");
+        LOG.info("Consumption record deleted");
     }
 
     static void validate(ConsumptionRecord r) {
@@ -41,13 +41,13 @@ public class ConsumptionRecordService {
                 || r.getEnergyType() == null || r.getEnergyType().isBlank()
                 || r.getPeriod() == null || r.getPeriod().isBlank()
                 || r.getAmount() < 0) {
-            throw new IllegalArgumentException("Некоректні дані запису споживання");
+            throw new IllegalArgumentException("Invalid consumption record data");
         }
     }
 
     private void requireMeasure(long id) throws SQLException {
         if (measureDAO.getById(id) == null) {
-            throw new IllegalArgumentException("Захід не знайдено");
+            throw new IllegalArgumentException("Measure not found");
         }
     }
 }

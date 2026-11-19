@@ -51,7 +51,7 @@ public class EnergyAuditServlet extends HttpServlet {
                 }
 
             } else {
-                throw new IllegalArgumentException("Невідома операція");
+                throw new IllegalArgumentException("Unknown operation");
             }
 
             writeJson(resp, service.getAll());

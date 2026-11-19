@@ -38,7 +38,7 @@ public class MeasureServlet extends HttpServlet {
                 String stateValue = req.getParameter("state");
 
                 if (stateValue == null || stateValue.isBlank()) {
-                    throw new IllegalArgumentException("Не задано стан заходу");
+                    throw new IllegalArgumentException("Measure state is not specified");
                 }
 
                 service.changeState(id(req), MeasureState.valueOf(stateValue));
@@ -47,7 +47,7 @@ public class MeasureServlet extends HttpServlet {
                 service.delete(id(req));
 
             } else {
-                throw new IllegalArgumentException("Невідома операція");
+                throw new IllegalArgumentException("Unknown operation");
             }
 
             writeJson(resp, service.getAll());

@@ -306,7 +306,7 @@ public class MainApp extends Application {
 
     private <T> T selected(TableView<T> table) {
         T v = table.getSelectionModel().getSelectedItem();
-        if (v == null) throw new IllegalArgumentException("Виберіть запис");
+        if (v == null) throw new IllegalArgumentException("Select a record");
         return v;
     }
 
