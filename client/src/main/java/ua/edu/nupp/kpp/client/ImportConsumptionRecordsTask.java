@@ -59,7 +59,7 @@ public class ImportConsumptionRecordsTask extends Task<Integer> {
                     try {
                         api.addRecord(r);
                     } catch (Exception e) {
-                        LOG.log(Level.SEVERE, "Помилка HTTP під час імпорту рядка " + (i + 1), e);
+                        LOG.log(Level.SEVERE, "HTTP error during import of row " + (i + 1), e);
                         throw e;
                     }
 
