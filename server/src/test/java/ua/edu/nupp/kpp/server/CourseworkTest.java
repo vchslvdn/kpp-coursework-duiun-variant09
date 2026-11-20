@@ -27,8 +27,18 @@ public class CourseworkTest {
     }
 
     @Test
-    void validSequentialStateTransitionIsAllowed() {
+    void proposedToApprovedAllowed() {
         assertTrue(MeasureService.isAllowedTransition(MeasureState.PROPOSED, MeasureState.APPROVED));
+    }
+
+    @Test
+    void approvedToImplementationAllowed() {
+        assertTrue(MeasureService.isAllowedTransition(MeasureState.APPROVED, MeasureState.IMPLEMENTATION));
+    }
+
+    @Test
+    void implementationToCompletedAllowed() {
+        assertTrue(MeasureService.isAllowedTransition(MeasureState.IMPLEMENTATION, MeasureState.COMPLETED));
     }
 
     @Test
