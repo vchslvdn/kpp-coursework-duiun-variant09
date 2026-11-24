@@ -38,7 +38,7 @@ public class MeasureServlet extends HttpServlet {
                 String stateValue = req.getParameter("state");
 
                 if (stateValue == null || stateValue.isBlank()) {
-                    throw new IllegalArgumentException("Не задано стан заходу");
+                    throw new IllegalArgumentException("Measure state is not specified");
                 }
 
                 service.changeState(id(req), MeasureState.valueOf(stateValue));
@@ -47,7 +47,7 @@ public class MeasureServlet extends HttpServlet {
                 service.delete(id(req));
 
             } else {
-                throw new IllegalArgumentException("Невідома операція");
+                throw new IllegalArgumentException("Unknown operation");
             }
 
             writeJson(resp, service.getAll());
@@ -66,7 +66,7 @@ public class MeasureServlet extends HttpServlet {
     private void writeError(HttpServletResponse resp, Exception e) throws IOException {
         boolean clientError = e instanceof IllegalArgumentException;
         int status = clientError ? HttpServletResponse.SC_BAD_REQUEST : HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-        String message = clientError ? (e.getMessage() == null ? "Некоректний запит" : e.getMessage()) : "Внутрішня помилка сервера";
+        String message = clientError ? (e.getMessage() == null ? "Invalid request" : e.getMessage()) : "Internal server error";
 
         resp.setStatus(status);
         writeJson(resp, Map.of("error", message));

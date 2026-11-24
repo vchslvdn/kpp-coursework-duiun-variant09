@@ -50,6 +50,8 @@ public class AuditObjectDAO {
         try (Connection c = DBUtil.getConnection(); PreparedStatement p = c.prepareStatement("DELETE FROM audit_object WHERE id=?")) {
             p.setLong(1, id);
             p.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new IllegalArgumentException("Cannot delete audit object because it has linked records", e);
         }
     }
 

@@ -3,6 +3,8 @@ package ua.edu.nupp.kpp.server;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 
 public class ConsumptionRecordService {
     private static final Logger LOG = Logger.getLogger(ConsumptionRecordService.class.getName());
@@ -21,19 +23,19 @@ public class ConsumptionRecordService {
         validate(r);
         requireMeasure(r.getMeasureId());
         dao.add(r);
-        LOG.info("Додано запис споживання");
+        LOG.info("Consumption record added");
     }
 
     public void update(ConsumptionRecord r) throws SQLException {
         validate(r);
         requireMeasure(r.getMeasureId());
         dao.update(r);
-        LOG.info("Оновлено запис споживання");
+        LOG.info("Consumption record updated");
     }
 
     public void delete(long id) throws SQLException {
         dao.delete(id);
-        LOG.info("Видалено запис споживання");
+        LOG.info("Consumption record deleted");
     }
 
     static void validate(ConsumptionRecord r) {
@@ -41,13 +43,21 @@ public class ConsumptionRecordService {
                 || r.getEnergyType() == null || r.getEnergyType().isBlank()
                 || r.getPeriod() == null || r.getPeriod().isBlank()
                 || r.getAmount() < 0) {
-            throw new IllegalArgumentException("Некоректні дані запису споживання");
+            throw new IllegalArgumentException("Invalid consumption record data");
+        }
+        if (r.getPeriod() == null || r.getPeriod().isBlank()) {
+            throw new IllegalArgumentException("Consumption period is required (YYYY-MM format)");
+        }
+        try {
+            YearMonth.parse(r.getPeriod().trim());
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid period. Expected format: YYYY-MM");
         }
     }
 
     private void requireMeasure(long id) throws SQLException {
         if (measureDAO.getById(id) == null) {
-            throw new IllegalArgumentException("Захід не знайдено");
+            throw new IllegalArgumentException("Measure not found");
         }
     }
 }

@@ -4,7 +4,7 @@ public class PriorityCalculator {
 
     public static double factor1(double actualConsumption, double normConsumption) {
         if (actualConsumption < 0 || normConsumption <= 0) {
-            throw new IllegalArgumentException("Некоректні дані для розрахунку F1");
+            throw new IllegalArgumentException("Invalid data for F1 calculation");
         }
 
         double value = (actualConsumption - normConsumption) / normConsumption * 100.0;
@@ -22,7 +22,7 @@ public class PriorityCalculator {
 
     private static void check(double value) {
         if (value < 0 || value > 100) {
-            throw new IllegalArgumentException("Фактор має бути в діапазоні 0..100");
+            throw new IllegalArgumentException("Factor must be in the range 0..100");
         }
     }
 }

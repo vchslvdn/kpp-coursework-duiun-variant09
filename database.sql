@@ -23,7 +23,7 @@ CREATE TABLE energy_audit (
     norm_consumption DOUBLE NOT NULL,
     payback_score DOUBLE NOT NULL,
     emission_score DOUBLE NOT NULL,
-    FOREIGN KEY (object_id) REFERENCES audit_object(id) ON DELETE CASCADE
+    FOREIGN KEY (object_id) REFERENCES audit_object(id)
 );
 
 CREATE TABLE measure (
@@ -34,7 +34,7 @@ CREATE TABLE measure (
     f2 DOUBLE NOT NULL,
     f3 DOUBLE NOT NULL,
     priority_index DOUBLE NOT NULL,
-    FOREIGN KEY (audit_id) REFERENCES energy_audit(id) ON DELETE CASCADE
+    FOREIGN KEY (audit_id) REFERENCES energy_audit(id)
 );
 
 CREATE TABLE consumption_record (
@@ -43,17 +43,26 @@ CREATE TABLE consumption_record (
      energy_type VARCHAR(40) NOT NULL,
      amount DOUBLE NOT NULL,
      period VARCHAR(20) NOT NULL,
-     FOREIGN KEY (measure_id) REFERENCES measure(id) ON DELETE CASCADE
+     FOREIGN KEY (measure_id) REFERENCES measure(id)
 );
 
-INSERT INTO audit_object(code, name, address)
-VALUES ('OBJ-01', 'Національний університет "Полтавська політехніка імені Юрія Кондратюка"', 'м. Полтава, просп. Віталія Грицаєнка, 24');
+INSERT INTO audit_object(code, name, address) VALUES
+('OBJ-01', 'Національний університет "Полтавська політехніка імені Юрія Кондратюка"', 'м. Полтава, просп. Віталія Грицаєнка, 24'),
+('OBJ-02', 'Гуртожиток №5 Національного університету "Полтавська політехніка імені Юрія Кондратюка"', 'м. Полтава, вул. Інститутський проріз, 24'),
+('OBJ-03', 'Гуртожиток №2 Національного університету "Полтавська політехніка імені Юрія Кондратюка"', 'м. Полтава, просп. Віталія Грицаєнка, 25');
 
-INSERT INTO energy_audit(object_id, audit_date, auditor_name, actual_consumption, norm_consumption, payback_score, emission_score)
-VALUES (1, '2026-10-22', 'Кантенко С.І.', 150.0, 100.0, 80.0, 70.0);
+INSERT INTO energy_audit(object_id, audit_date, auditor_name, actual_consumption, norm_consumption, payback_score, emission_score) VALUES
+(1, '2026-10-22', 'Кантенко С.І.', 150.0, 100.0, 80.0, 70.0),
+(2, '2026-10-25', 'Петренко О.В.', 240.0, 200.0, 60.0, 50.0),
+(3, '2026-11-02', 'Привітенко М.М.', 350.0, 200.0, 90.0, 85.0);
 
-INSERT INTO measure(audit_id, state, f1, f2, f3, priority_index)
-VALUES (1, 'PROPOSED', 50.0, 80.0, 70.0, 65.5);
+INSERT INTO measure(audit_id, state, f1, f2, f3, priority_index) VALUES
+(1, 'PROPOSED', 50.0, 80.0, 70.0, 65.5),
+(2, 'APPROVED', 20.0, 60.0, 50.0, 41.5),
+(3, 'COMPLETED', 75.0, 90.0, 85.0, 82.75);
+
 
 INSERT INTO consumption_record(measure_id, energy_type, amount, period) VALUES
-    (1, 'Електроенергія', 1420.5, '2026-10');
+(1, 'Електроенергія', 1420.5, '2026-10'),
+(2, 'Природний газ', 410.8, '2026-03'),
+(3, 'Теплова енергія', 2150.0, '2026-11');

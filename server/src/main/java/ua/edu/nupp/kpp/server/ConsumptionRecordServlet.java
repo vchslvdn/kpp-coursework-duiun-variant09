@@ -48,7 +48,7 @@ public class ConsumptionRecordServlet extends HttpServlet {
                 }
 
             } else {
-                throw new IllegalArgumentException("Невідома операція");
+                throw new IllegalArgumentException("Unknown operation");
             }
 
             writeJson(resp, service.getAll());
@@ -67,7 +67,7 @@ public class ConsumptionRecordServlet extends HttpServlet {
     private void writeError(HttpServletResponse resp, Exception e) throws IOException {
         boolean clientError = e instanceof IllegalArgumentException;
         int status = clientError ? HttpServletResponse.SC_BAD_REQUEST : HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-        String message = clientError ? (e.getMessage() == null ? "Некоректний запит" : e.getMessage()) : "Внутрішня помилка сервера";
+        String message = clientError ? (e.getMessage() == null ? "Invalid request" : e.getMessage()) : "Internal server error";
 
         resp.setStatus(status);
         writeJson(resp, Map.of("error", message));

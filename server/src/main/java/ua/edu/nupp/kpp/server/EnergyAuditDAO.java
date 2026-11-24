@@ -46,6 +46,8 @@ public class EnergyAuditDAO {
         try (Connection c = DBUtil.getConnection(); PreparedStatement p = c.prepareStatement("DELETE FROM energy_audit WHERE id=?")) {
             p.setLong(1, id);
             p.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new IllegalArgumentException("Cannot delete energy audit because it has linked records", e);
         }
     }
 

@@ -47,7 +47,7 @@ public class AuditObjectServlet extends HttpServlet {
                 }
 
             } else {
-                throw new IllegalArgumentException("Невідома операція");
+                throw new IllegalArgumentException("Unknown operation");
             }
 
             writeJson(resp, service.getAll());
@@ -73,8 +73,8 @@ public class AuditObjectServlet extends HttpServlet {
                 : HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
         String message = clientError
-                ? (e.getMessage() == null ? "Некоректний запит" : e.getMessage())
-                : "Внутрішня помилка сервера";
+                ? (e.getMessage() == null ? "Invalid request" : e.getMessage())
+                : "Internal server error";
 
         resp.setStatus(status);
         writeJson(resp, Map.of("error", message));

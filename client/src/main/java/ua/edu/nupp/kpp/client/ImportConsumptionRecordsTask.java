@@ -20,13 +20,13 @@ public class ImportConsumptionRecordsTask extends Task<Integer> {
 
     @Override
     protected Integer call() throws Exception {
-        LOG.info("Початок CSV-імпорту");
+        LOG.info("Starting CSV import");
         updateMessage("Читання CSV-файла...");
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
         String header = "object_id;energy_type;amount;period";
 
         if (lines.isEmpty() || !header.equals(lines.get(0).strip())) {
-            throw new IllegalArgumentException("Некоректний заголовок CSV");
+            throw new IllegalArgumentException("Invalid CSV header");
         }
 
         int total = (int) lines.stream().skip(1).filter(s -> !s.isBlank()).count();
@@ -40,7 +40,7 @@ public class ImportConsumptionRecordsTask extends Task<Integer> {
             String[] p = lines.get(i).split(";", -1);
 
             if (p.length != 4) {
-                LOG.warning("Пропущено рядок " + (i + 1));
+                LOG.warning("Skipped line " + (i + 1));
             } else {
                 try {
                     ConsumptionRecord r = new ConsumptionRecord(
@@ -52,20 +52,20 @@ public class ImportConsumptionRecordsTask extends Task<Integer> {
                     );
 
                     if (!Double.isFinite(r.getAmount())) {
-                        LOG.warning("NaN або Infinity у рядку " + (i + 1));
-                        throw new IllegalArgumentException("Некоректне числове значення у рядку " + (i + 1));
+                        LOG.warning("NaN or Infinity at line " + (i + 1));
+                        throw new IllegalArgumentException("Invalid numeric value at line " + (i + 1));
                     }
 
                     try {
                         api.addRecord(r);
                     } catch (Exception e) {
-                        LOG.log(Level.SEVERE, "Помилка HTTP під час імпорту рядка " + (i + 1), e);
+                        LOG.log(Level.SEVERE, "HTTP error during import of row " + (i + 1), e);
                         throw e;
                     }
 
                     imported++;
                 } catch (NumberFormatException e) {
-                    LOG.warning("Некоректне число у рядку " + (i + 1));
+                    LOG.warning("Invalid number at line " + (i + 1));
                     throw e;
                 }
             }
@@ -74,8 +74,8 @@ public class ImportConsumptionRecordsTask extends Task<Integer> {
         }
 
         if (total == 0) updateProgress(1, 1);
-        LOG.info("Завершення імпорту...");
-        LOG.info("Імпортовано: " + imported);
+        LOG.info("Finishing import...");
+        LOG.info("Imported: " + imported);
         return imported;
     }
 }
